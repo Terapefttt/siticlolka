@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PumpTools — Набор профессиональных инструментов</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: linear-gradient(160deg, #0a0e27 0%, #1a1f3a 50%, #0f1330 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ── Header ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,14,39,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-link {
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      border-radius: 8px;
+    }
+    .cta-btn {
+      margin-left: 8px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0a0e27;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ── Mobile header ── */
+    .mobile-header { display: none; }
+    .mobile-header .header-inner { height: 56px; padding: 0 20px; }
+    .mobile-header .logo-text { font-size: 18px; }
+    .mobile-header .cta-btn { padding: 7px 16px; font-size: 13px; border-radius: 8px; margin-left: 0; }
+
+    /* ── Main content ── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ambient blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .blob-1 {
+      top: -15%;
+      left: 5%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+    .blob-2 {
+      bottom: -10%;
+      right: 0%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%);
+      filter: blur(100px);
+    }
+
+    /* ── Hero Section ── */
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title {
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #00f0ff 0%, #a855f7 60%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0,240,255,0.2));
+    }
+    .hero-tagline {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.01em;
+      margin-top: 12px;
+    }
+
+    /* ── Tools Grid ── */
+    .tools-section {
+      display: flex;
+      justify-content: center;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 280px);
+      gap: 32px;
+    }
+
+    /* ── Active Card ── */
+    .card-active {
+      width: 280px;
+      height: 280px;
+      cursor: pointer;
+      outline: none;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,240,255,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+    }
+    .card-active-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding-top: 8px;
+    }
+    .card-active-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .card-active-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .card-active-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+      max-width: 220px;
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+    .status-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+    }
+
+    /* ── Locked Card ── */
+    .card-locked {
+      width: 280px;
+      height: 280px;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .card-locked-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .card-locked-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: -0.01em;
+    }
+    .card-locked-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 400;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,14,39,0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+      max-width: 300px;
+      margin-top: 16px;
+    }
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+    }
+    .footer-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin-bottom: 24px;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .social-icon svg {
+      fill: rgba(255,255,255,0.5);
+    }
+
+    /* ── Focus styles ── */
+    a:focus-visible,
+    [role="button"]:focus-visible {
+      outline: 2px solid #00f0ff;
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 280px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .desktop-header { display: none; }
+      .mobile-header { display: block; }
+
+      .hero-title { font-size: 44px; }
+      .hero-section { padding: 48px 20px 24px; }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .tools-grid .card-active,
+      .tools-grid .card-locked {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 36px; }
+
+      .tools-grid .card-active,
+      .tools-grid .card-locked {
+        height: 260px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-header { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Desktop Header ═══ -->
+  <header class="site-header desktop-header">
+    <div class="header-inner">
+      <a href="#" aria-label="PumpTools — На главную">
+        <span class="logo-text">PumpTools</span>
+      </a>
+      <nav class="header-nav">
+        <a href="#tools" class="nav-link">Инструменты</a>
+        <a href="#" class="nav-link">Тарифы</a>
+        <a href="#" class="nav-link">О нас</a>
+        <a href="#" class="nav-link">Контакты</a>
+        <a href="#tools" class="cta-btn">Начать</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ Mobile Header ═══ -->
+  <header class="site-header mobile-header">
+    <div class="header-inner">
+      <a href="#" aria-label="PumpTools — На главную">
+        <span class="logo-text">PumpTools</span>
+      </a>
+      <a href="#tools" class="cta-btn">Начать</a>
+    </div>
+  </header>
+
+  <!-- ═══ Main ═══ -->
+  <main class="main-content">
+    <!-- Ambient blobs -->
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2" aria-hidden="true"></div>
+
+    <!-- Hero -->
+    <section class="hero-section">
+      <h1 class="hero-title">PumpTools</h1>
+      <p class="hero-tagline">Набор профессиональных инструментов</p>
+    </section>
+
+    <!-- Tools Grid -->
+    <section id="tools" class="tools-section" aria-label="Сетка инструментов">
+      <div class="tools-grid">
+
+        <!-- Card 1: Freepik (Active) -->
+        <div
+          class="card-active"
+          role="button"
+          tabindex="0"
+          aria-label="Открыть Freepik — Миллионы графических ресурсов для ваших проектов"
+          onclick="window.open('https://www.freepik.com','_blank','noopener,noreferrer')"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://www.freepik.com','_blank','noopener,noreferrer')}"
+        >
+          <div class="card-active-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="ig" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#00f0ff"/>
+                  <stop offset="1" stop-color="#a855f7"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="64" height="64" rx="16" stroke="url(#ig)" stroke-width="2" fill="rgba(0,240,255,0.06)"/>
+              <path d="M24 52V28l8 8 8-12 8 12 8-8v24H24z" fill="url(#ig)" opacity="0.3"/>
+              <path d="M24 52V28l8 8 8-12 8 12 8-8v24H24z" stroke="url(#ig)" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="32" cy="34" r="4" fill="url(#ig)" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="card-active-info">
+            <h3 class="card-active-title">Freepik</h3>
+            <p class="card-active-desc">Миллионы премиум-графики, фото, векторов и шаблонов для ваших проектов</p>
+            <div class="status-indicator">
+              <span class="status-dot"></span>
+              <span class="status-text">Доступно</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Locked -->
+        <div class="card-locked" aria-label="Инструмент скоро появится — Требуется премиум-доступ" aria-disabled="true">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="16" y="28" width="32" height="24" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="rgba(255,255,255,0.05)"/>
+            <path d="M24 28V22a8 8 0 0116 0v6" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="32" cy="40" r="3" fill="rgba(255,255,255,0.3)"/>
+            <path d="M32 43v3" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="card-locked-info">
+            <h3 class="card-locked-title">Скоро</h3>
+            <p class="card-locked-sub">Требуется премиум-доступ</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Locked -->
+        <div class="card-locked" aria-label="Инструмент скоро появится — Требуется премиум-доступ" aria-disabled="true">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="16" y="28" width="32" height="24" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="rgba(255,255,255,0.05)"/>
+            <path d="M24 28V22a8 8 0 0116 0v6" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="32" cy="40" r="3" fill="rgba(255,255,255,0.3)"/>
+            <path d="M32 43v3" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="card-locked-info">
+            <h3 class="card-locked-title">Скоро</h3>
+            <p class="card-locked-sub">Требуется премиум-доступ</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+
+        <!-- Brand -->
+        <div>
+          <span class="logo-text">PumpTools</span>
+          <p class="footer-brand-desc">
+            Набор профессиональных инструментов для дизайнеров, разработчиков и творческих специалистов. Все необходимое в одном месте.
+          </p>
+        </div>
+
+        <!-- Product -->
+        <div>
+          <h4 class="footer-col-title">Продукт</h4>
+          <ul class="footer-links">
+            <li><a href="#tools" class="footer-link">Инструменты</a></li>
+            <li><a href="#" class="footer-link">Тарифы</a></li>
+            <li><a href="#" class="footer-link">Обновления</a></li>
+            <li><a href="#" class="footer-link">Документация</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="footer-col-title">Компания</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">О нас</a></li>
+            <li><a href="#" class="footer-link">Блог</a></li>
+            <li><a href="#" class="footer-link">Карьера</a></li>
+            <li><a href="#" class="footer-link">Контакты</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="footer-col-title">Правовая информация</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Политика конфиденциальности</a></li>
+            <li><a href="#" class="footer-link">Условия использования</a></li>
+            <li><a href="#" class="footer-link">Лицензии</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">2025 PumpTools. Все права защищены.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon" aria-label="Telegram">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.57 7.4c-.12.54-.43.67-.88.42l-2.44-1.8-1.18 1.13c-.13.13-.24.24-.49.24l.17-2.48 4.5-4.07c.2-.17-.04-.27-.3-.1l-5.57 3.5-2.4-.75c-.52-.16-.53-.52.11-.77l9.37-3.61c.44-.16.82.1.68.7z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Электронная почта">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
