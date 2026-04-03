@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PumpTools — Freepik и Runaway</title>
+  <title>PumpTools — Freepik и Runway</title>
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -156,7 +156,7 @@
 
     .card-active {
       width: 280px;
-      height: 280px;
+      min-height: 280px;
       cursor: pointer;
       outline: none;
       border-radius: 24px;
@@ -187,8 +187,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       text-align: center;
+      width: 100%;
     }
     .card-active-title {
       font-size: 24px;
@@ -201,6 +202,16 @@
       line-height: 1.6;
       color: rgba(255,255,255,0.8);
       max-width: 220px;
+    }
+    .card-models {
+      margin-top: 2px;
+      padding-top: 10px;
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      color: rgba(255,255,255,0.38);
     }
     .status-indicator {
       display: flex;
@@ -427,7 +438,8 @@
 
       .tools-grid .card-active,
       .tools-grid .card-locked {
-        height: 260px;
+        min-height: 260px;
+        height: auto;
       }
 
       .footer-grid {
@@ -486,7 +498,7 @@
           class="card-active"
           role="button"
           tabindex="0"
-          aria-label="Открыть Freepik — Nano Banana Pro, Nano Banana 2 и другие инструменты Freepik"
+          aria-label="Открыть Freepik — Nano Banana Pro, Nano Banana 2, Grok и другие модели Freepik"
           onclick="window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')"
           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')}"
         >
@@ -504,7 +516,8 @@
           </div>
           <div class="card-active-info">
             <h3 class="card-active-title">Freepik</h3>
-            <p class="card-active-desc">Nano Banana Pro, Nano Banana 2 и другие инструменты Freepik для генерации и редактирования изображений</p>
+            <p class="card-active-desc">Генерация и редактирование изображений в одном интерфейсе.</p>
+            <p class="card-models">Nano Banana Pro, Nano Banana 2, Grok, Mystic 2.5, Flux.2 Pro</p>
             <div class="status-indicator">
               <span class="status-dot"></span>
               <span class="status-text">Доступно</span>
@@ -516,26 +529,28 @@
           class="card-active"
           role="button"
           tabindex="0"
-          aria-label="Открыть Runaway — видео генерация Kling, 3 Pro, Gen 4.5 и Limitless"
-          onclick="openRunawayModal()"
-          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openRunawayModal()}"
+          aria-label="Открыть Runway — видео генерация Kling, Veo 3.1, Gen 4.5 и Hailuo"
+          onclick="openRunwayModal()"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openRunwayModal()}"
         >
           <div class="card-active-icon">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
               <defs>
-                <linearGradient id="runaway-gradient" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#22d3ee"/>
-                  <stop offset="1" stop-color="#f472b6"/>
+                <linearGradient id="runway-gradient" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#f5f5f4"/>
+                  <stop offset="1" stop-color="#8b8b97"/>
                 </linearGradient>
               </defs>
-              <rect x="8" y="8" width="64" height="64" rx="16" stroke="url(#runaway-gradient)" stroke-width="2" fill="rgba(244,114,182,0.08)"/>
-              <path d="M25 50V30.5c0-1.2 1.32-1.93 2.34-1.3l17.4 10.75a1.53 1.53 0 010 2.6l-17.4 10.75A1.53 1.53 0 0125 52V50z" fill="url(#runaway-gradient)"/>
-              <circle cx="58" cy="24" r="6" fill="rgba(34,211,238,0.22)" stroke="url(#runaway-gradient)" stroke-width="1.5"/>
+              <rect x="8" y="8" width="64" height="64" rx="16" stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="rgba(255,255,255,0.04)"/>
+              <g transform="translate(19.5 19.5) scale(0.225)">
+                <path d="M139.648 181.578C117.636 183.59 99.2302 157.796 85.1212 144.713C77.9872 196.117 0.308314 191.244 0.361355 139.098C0.387876 117.197 0.361355 63.6737 0.361355 42.4605C0.361355 34.8333 2.45648 27.1531 6.38154 20.6382C13.8338 8.00562 28.2345 -0.151255 42.9004 0.00764509C64.9921 0.0341285 118.192 -0.0188383 139.648 0.00764509C191.84 0.00764509 196.8 77.6569 145.217 84.6485L169.696 109.093C196.587 134.384 176.405 182.69 139.648 181.578ZM127.793 150.989C142.963 166.615 167.176 142.409 151.555 127.26L109.122 84.8868H85.3865C85.3865 87.1909 85.3865 106.947 85.3865 108.616L122.064 145.242L127.793 150.989ZM26.0598 139.125C25.7151 160.841 60.0062 160.921 59.6615 139.125V42.4605C59.9532 31.6288 48.4963 23.0217 38.1532 26.3586C37.7024 26.491 37.2781 26.6234 36.8802 26.7823C30.3827 29.1923 25.8742 35.8396 26.0598 42.7783V139.125ZM139.648 59.2245C161.448 59.5687 161.421 25.3257 139.648 25.67H82.0183C86.3942 34.8862 85.2804 49.2402 85.3599 59.2245C88.4894 59.2245 138.109 59.2245 139.648 59.2245Z" fill="url(#runway-gradient)"/>
+              </g>
             </svg>
           </div>
           <div class="card-active-info">
-            <h3 class="card-active-title">Runaway</h3>
-            <p class="card-active-desc">Видео-генерация: Kling, 3 Pro, Gen 4.5, Limitless и другие инструменты для создания роликов</p>
+            <h3 class="card-active-title">Runway</h3>
+            <p class="card-active-desc">Видео-инструменты для быстрых концептов, сцен и production-ready роликов.</p>
+            <p class="card-models">Kling 3.0, Veo 3.1, Runway Gen 4.5, Runway Act Two, Hailuo 2.3</p>
             <div class="status-indicator">
               <span class="status-dot"></span>
               <span class="status-text">Требует доступ</span>
@@ -560,14 +575,14 @@
     </section>
   </main>
 
-  <div class="modal-backdrop" id="runawayModal" aria-hidden="true">
-    <div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="runawayModalTitle">
-      <h2 class="modal-title" id="runawayModalTitle">Доступ к Runaway еще не активирован</h2>
+  <div class="modal-backdrop" id="runwayModal" aria-hidden="true">
+    <div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="runwayModalTitle">
+      <h2 class="modal-title" id="runwayModalTitle">Доступ к Runway еще не активирован</h2>
       <p class="modal-text">
         Вы еще не приобрели доступ к этой функции. Вернитесь к боту, отправьте команду и оплатите доступ.
       </p>
       <div class="modal-actions">
-        <button type="button" class="modal-close" onclick="closeRunawayModal()">Понятно</button>
+        <button type="button" class="modal-close" onclick="closeRunwayModal()">Понятно</button>
       </div>
     </div>
   </div>
@@ -579,7 +594,7 @@
         <div>
           <span class="logo-text">PumpTools</span>
           <p class="footer-brand-desc">
-            Набор профессиональных инструментов для дизайнеров, разработчиков и творческих специалистов. Freepik и Runaway вынесены в отдельные карточки.
+            Набор профессиональных инструментов для дизайнеров, разработчиков и творческих специалистов. Freepik и Runway вынесены в отдельные карточки.
           </p>
         </div>
 
@@ -640,27 +655,27 @@
   </footer>
 
   <script>
-    const runawayModal = document.getElementById('runawayModal');
+    const runwayModal = document.getElementById('runwayModal');
 
-    function openRunawayModal() {
-      runawayModal.classList.add('is-open');
-      runawayModal.setAttribute('aria-hidden', 'false');
+    function openRunwayModal() {
+      runwayModal.classList.add('is-open');
+      runwayModal.setAttribute('aria-hidden', 'false');
     }
 
-    function closeRunawayModal() {
-      runawayModal.classList.remove('is-open');
-      runawayModal.setAttribute('aria-hidden', 'true');
+    function closeRunwayModal() {
+      runwayModal.classList.remove('is-open');
+      runwayModal.setAttribute('aria-hidden', 'true');
     }
 
-    runawayModal.addEventListener('click', function(event) {
-      if (event.target === runawayModal) {
-        closeRunawayModal();
+    runwayModal.addEventListener('click', function(event) {
+      if (event.target === runwayModal) {
+        closeRunwayModal();
       }
     });
 
     document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape' && runawayModal.classList.contains('is-open')) {
-        closeRunawayModal();
+      if (event.key === 'Escape' && runwayModal.classList.contains('is-open')) {
+        closeRunwayModal();
       }
     });
   </script>
