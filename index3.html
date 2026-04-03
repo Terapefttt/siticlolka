@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PumpTools — Freepik и Runaway</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'SF Pro Display', 'SF Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: linear-gradient(160deg, #0a0e27 0%, #1a1f3a 50%, #0f1330 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,14,39,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-link {
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      border-radius: 8px;
+    }
+    .cta-btn {
+      margin-left: 8px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0a0e27;
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .mobile-header { display: none; }
+    .mobile-header .header-inner { height: 56px; padding: 0 20px; }
+    .mobile-header .logo-text { font-size: 18px; }
+    .mobile-header .cta-btn { padding: 7px 16px; font-size: 13px; border-radius: 8px; margin-left: 0; }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .blob-1 {
+      top: -15%;
+      left: 5%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+    .blob-2 {
+      bottom: -10%;
+      right: 0%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%);
+      filter: blur(100px);
+    }
+
+    .hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title {
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #00f0ff 0%, #a855f7 60%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0,240,255,0.2));
+    }
+    .hero-tagline {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.01em;
+      margin-top: 12px;
+      max-width: 720px;
+    }
+
+    .tools-section {
+      display: flex;
+      justify-content: center;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 280px);
+      gap: 32px;
+    }
+
+    .card-active {
+      width: 280px;
+      height: 280px;
+      cursor: pointer;
+      outline: none;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,240,255,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-active:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,240,255,0.18);
+    }
+    .card-active-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding-top: 8px;
+    }
+    .card-active-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .card-active-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .card-active-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+      max-width: 220px;
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+    .status-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 500;
+    }
+
+    .card-locked {
+      width: 280px;
+      height: 280px;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .card-locked-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .card-locked-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: -0.01em;
+    }
+    .card-locked-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 400;
+      max-width: 180px;
+      line-height: 1.5;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 22, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+    }
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+    .access-modal {
+      width: min(100%, 520px);
+      border-radius: 24px;
+      background: rgba(14, 20, 48, 0.96);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+      padding: 28px;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .modal-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.78);
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+    .modal-close {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      color: #0a0e27;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .site-footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,14,39,0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+      max-width: 300px;
+      margin-top: 16px;
+    }
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+    }
+    .footer-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin-bottom: 24px;
+    }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+    }
+    .social-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .social-icon svg {
+      fill: rgba(255,255,255,0.5);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible {
+      outline: 2px solid #00f0ff;
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 960px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 280px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .desktop-header { display: none; }
+      .mobile-header { display: block; }
+
+      .hero-title { font-size: 44px; }
+      .hero-section { padding: 48px 20px 24px; }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .tools-grid .card-active,
+      .tools-grid .card-locked {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 36px; }
+
+      .tools-grid .card-active,
+      .tools-grid .card-locked {
+        height: 260px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .access-modal {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-header { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header desktop-header">
+    <div class="header-inner">
+      <a href="#" aria-label="PumpTools — На главную">
+        <span class="logo-text">PumpTools</span>
+      </a>
+      <nav class="header-nav">
+        <a href="#tools" class="nav-link">Инструменты</a>
+        <a href="#" class="nav-link">Тарифы</a>
+        <a href="#" class="nav-link">О нас</a>
+        <a href="#" class="nav-link">Контакты</a>
+        <a href="#tools" class="cta-btn">Начать</a>
+      </nav>
+    </div>
+  </header>
+
+  <header class="site-header mobile-header">
+    <div class="header-inner">
+      <a href="#" aria-label="PumpTools — На главную">
+        <span class="logo-text">PumpTools</span>
+      </a>
+      <a href="#tools" class="cta-btn">Начать</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2" aria-hidden="true"></div>
+
+    <section class="hero-section">
+      <h1 class="hero-title">PumpTools</h1>
+      <p class="hero-tagline">Набор инструментов для генерации изображений и видео в одном интерфейсе</p>
+    </section>
+
+    <section id="tools" class="tools-section" aria-label="Сетка инструментов">
+      <div class="tools-grid">
+
+        <div
+          class="card-active"
+          role="button"
+          tabindex="0"
+          aria-label="Открыть Freepik — Nano Banana Pro, Nano Banana 2 и другие инструменты Freepik"
+          onclick="window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')}"
+        >
+          <div class="card-active-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="freepik-gradient" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#00f0ff"/>
+                  <stop offset="1" stop-color="#a855f7"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="64" height="64" rx="16" stroke="url(#freepik-gradient)" stroke-width="2" fill="rgba(0,240,255,0.06)"/>
+              <text x="40" y="54" text-anchor="middle" font-family="'SF Pro Display',system-ui,sans-serif" font-size="44" font-weight="700" fill="url(#freepik-gradient)">F</text>
+            </svg>
+          </div>
+          <div class="card-active-info">
+            <h3 class="card-active-title">Freepik</h3>
+            <p class="card-active-desc">Nano Banana Pro, Nano Banana 2 и другие инструменты Freepik для генерации и редактирования изображений</p>
+            <div class="status-indicator">
+              <span class="status-dot"></span>
+              <span class="status-text">Доступно</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card-active"
+          role="button"
+          tabindex="0"
+          aria-label="Открыть Runaway — видео генерация Kling, 3 Pro, Gen 4.5 и Limitless"
+          onclick="openRunawayModal()"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openRunawayModal()}"
+        >
+          <div class="card-active-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="runaway-gradient" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#22d3ee"/>
+                  <stop offset="1" stop-color="#f472b6"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="64" height="64" rx="16" stroke="url(#runaway-gradient)" stroke-width="2" fill="rgba(244,114,182,0.08)"/>
+              <path d="M25 50V30.5c0-1.2 1.32-1.93 2.34-1.3l17.4 10.75a1.53 1.53 0 010 2.6l-17.4 10.75A1.53 1.53 0 0125 52V50z" fill="url(#runaway-gradient)"/>
+              <circle cx="58" cy="24" r="6" fill="rgba(34,211,238,0.22)" stroke="url(#runaway-gradient)" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="card-active-info">
+            <h3 class="card-active-title">Runaway</h3>
+            <p class="card-active-desc">Видео-генерация: Kling, 3 Pro, Gen 4.5, Limitless и другие инструменты для создания роликов</p>
+            <div class="status-indicator">
+              <span class="status-dot"></span>
+              <span class="status-text">Требует доступ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-locked" aria-label="Новый инструмент скоро появится" aria-disabled="true">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <rect x="16" y="28" width="32" height="24" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="rgba(255,255,255,0.05)"/>
+            <path d="M24 28V22a8 8 0 0116 0v6" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="32" cy="40" r="3" fill="rgba(255,255,255,0.3)"/>
+            <path d="M32 43v3" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="card-locked-info">
+            <h3 class="card-locked-title">Скоро</h3>
+            <p class="card-locked-sub">Здесь можно разместить следующий инструмент или отдельный тарифный доступ</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="runawayModal" aria-hidden="true">
+    <div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="runawayModalTitle">
+      <h2 class="modal-title" id="runawayModalTitle">Доступ к Runaway еще не активирован</h2>
+      <p class="modal-text">
+        Вы еще не приобрели доступ к этой функции. Вернитесь к боту, отправьте команду и оплатите доступ.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="modal-close" onclick="closeRunawayModal()">Понятно</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+
+        <div>
+          <span class="logo-text">PumpTools</span>
+          <p class="footer-brand-desc">
+            Набор профессиональных инструментов для дизайнеров, разработчиков и творческих специалистов. Freepik и Runaway вынесены в отдельные карточки.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Продукт</h4>
+          <ul class="footer-links">
+            <li><a href="#tools" class="footer-link">Инструменты</a></li>
+            <li><a href="#" class="footer-link">Тарифы</a></li>
+            <li><a href="#" class="footer-link">Обновления</a></li>
+            <li><a href="#" class="footer-link">Документация</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Компания</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">О нас</a></li>
+            <li><a href="#" class="footer-link">Блог</a></li>
+            <li><a href="#" class="footer-link">Карьера</a></li>
+            <li><a href="#" class="footer-link">Контакты</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Правовая информация</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link">Политика конфиденциальности</a></li>
+            <li><a href="#" class="footer-link">Условия использования</a></li>
+            <li><a href="#" class="footer-link">Лицензии</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">2025 PumpTools. Все права защищены.</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon" aria-label="Telegram">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.57 7.4c-.12.54-.43.67-.88.42l-2.44-1.8-1.18 1.13c-.13.13-.24.24-.49.24l.17-2.48 4.5-4.07c.2-.17-.04-.27-.3-.1l-5.57 3.5-2.4-.75c-.52-.16-.53-.52.11-.77l9.37-3.61c.44-.16.82.1.68.7z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Электронная почта">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const runawayModal = document.getElementById('runawayModal');
+
+    function openRunawayModal() {
+      runawayModal.classList.add('is-open');
+      runawayModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeRunawayModal() {
+      runawayModal.classList.remove('is-open');
+      runawayModal.setAttribute('aria-hidden', 'true');
+    }
+
+    runawayModal.addEventListener('click', function(event) {
+      if (event.target === runawayModal) {
+        closeRunawayModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && runawayModal.classList.contains('is-open')) {
+        closeRunawayModal();
+      }
+    });
+  </script>
+
+</body>
+</html>
