@@ -347,6 +347,55 @@
       fill: rgba(255,255,255,0.5);
     }
 
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 22, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+    }
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+    .access-modal {
+      width: min(100%, 520px);
+      border-radius: 24px;
+      background: rgba(14, 20, 48, 0.96);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+      padding: 28px;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .modal-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.78);
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+    .modal-close {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(135deg, #00f0ff, #a855f7);
+      color: #0a0e27;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
     a:focus-visible,
     [role="button"]:focus-visible {
       outline: 2px solid #00f0ff;
@@ -391,6 +440,9 @@
       }
       .footer-grid {
         grid-template-columns: 1fr;
+      }
+      .access-modal {
+        padding: 24px 20px;
       }
     }
 
@@ -440,8 +492,8 @@
           role="button"
           tabindex="0"
           aria-label="Открыть Freepik — генерация и редактирование изображений"
-          onclick="window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')"
-          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://www.freepik.com/pikaso/ai-image-generator#from_element=mainmenu&amp;from_view=pinned_tool','_blank','noopener,noreferrer')}"
+          onclick="openFreepikModal()"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFreepikModal()}"
         >
           <div class="card-active-icon">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
@@ -515,6 +567,18 @@
     </section>
   </main>
 
+  <div class="modal-backdrop" id="freepikModal" aria-hidden="true">
+    <div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="freepikModalTitle">
+      <h2 class="modal-title" id="freepikModalTitle">Выберите другую сессию</h2>
+      <p class="modal-text">
+        Пожалуйста, выберите другую сессию внутри браузера Diсloack, например «Сессия 1» или «Сессия 2». В этой сессии вы можете пользоваться только сервисом для генерации видео.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="modal-close" onclick="closeFreepikModal()">Понятно</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-grid">
@@ -579,5 +643,30 @@
       </div>
     </div>
   </footer>
+  <script>
+    const freepikModal = document.getElementById('freepikModal');
+
+    function openFreepikModal() {
+      freepikModal.classList.add('is-open');
+      freepikModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeFreepikModal() {
+      freepikModal.classList.remove('is-open');
+      freepikModal.setAttribute('aria-hidden', 'true');
+    }
+
+    freepikModal.addEventListener('click', function(event) {
+      if (event.target === freepikModal) {
+        closeFreepikModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && freepikModal.classList.contains('is-open')) {
+        closeFreepikModal();
+      }
+    });
+  </script>
 </body>
 </html>
